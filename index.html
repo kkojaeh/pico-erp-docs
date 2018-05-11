@@ -79,11 +79,6 @@
 
       renderer: {
         code: function (code, lang) {
-          if (lang === "mermaid") {
-            return (
-              '<div class="mermaid">' + mermaid.render(lang, code) + "</div>"
-            );
-          }
           if (lang === "draw.io") {
 
           }
@@ -108,8 +103,6 @@
       }
     }
   };
-
-  mermaid.initialize({startOnLoad: false});
 
   function plantUmlEncode(code) {
     return encode64(deflate(unescape(encodeURIComponent(code))));
