@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!--suppress Annotator, Annotator -->
+otator -->
+otator -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta name="description" content="Description">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.css">
+  <script src="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script src="//unpkg.com/docsify-edit-on-github/index.js"></script>
+  <script src="//unpkg.com/docsify-copy-code"></script>
+  <script src="//unpkg.com/bpmn-js@1.3.2/dist/bpmn-viewer.production.min.js"></script>
+  <script src="//unpkg.com/lodash@4.17.10/lodash.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/bpmn-js@1.3.2/dist/assets/diagram-js.css">
+
+
+</head>
+<body onhashchange="onHashChange()">
+<div id="app"></div>
+<style>
+  article.markdown-section{
+    overflow-x: auto;
+    max-width: initial;
+  }
+</style>
+<script>
+  window.$docsify = {
+    loadSidebar: true,
+    name: 'Pico ERP',
+    repo: 'https://github.com/kkojaeh/pico-erp-server/tree/master/docs',
+    alias: {
+      '/.*/_sidebar.md': '/_sidebar.md'
+    },
+
+    // complete configuration parameters
+    search: {
+      maxAge: 86400000, // Expiration time, the default one day
+      paths: 'auto', // or 'auto'
+      placeholder: '검색어를 입력하세요',
+
+      noData: '결과 없음',
+
+      // Headline depth, 1 - 6
+      depth: 2
+    },
+
+    plugins: [
+      EditOnGithubPlugin.create(
+        'https://github.com/kkojaeh/pico-erp-server/blob/master/docs/'
+      )
+    ],
+
+    markdown: {
+
+      renderer: {
+        code: function (code, lang) {
+          if (lang === "mermaid") {
+            return (
+              '<div class="mermaid">' + mermaid.render(lang, code) + "</div>"
+            );
+          }
+          return this.origin.code.apply(this, arguments);
+        },
+        image: function (href, title, text) {
+          if (href.lastIndexOf('.puml') > -1) {
+            afterRenderer();
+            return '<p render-type="puml" render-styles="' + title + '" render-source="' + href
+              + '"></p>';
+          }
+          if (href.lastIndexOf('.bpmn') > -1) {
+            afterRenderer();
+            return '<p render-type="bpmn" render-styles="' + title + '" render-source="' + href
+              + '"></p>';
+          }
+          return this.origin.image.apply(this, arguments);
+        }
+      }
+    }
+  };
+
+  mermaid.initialize({startOnLoad: false});
+
+  function plantUmlEncode(code) {
+    return encode64(deflate(unescape(encodeURIComponent(code))));
+  }
+
+  var afterRenderer = _.debounce(function afterRenderer() {
+    _.forEach(document.querySelectorAll('[render-type="bpmn"]'), function(target){
+      target.removeAttribute('render-type')
+      try {
+        var styles = JSON.parse(_.unescape(target.getAttribute('render-styles')))
+        _.forIn(styles, function (value, key) {
+          target.style[key] = value
+        })
+      } catch (e) {}
+      var viewer = new BpmnJS();
+      target.viewer = viewer;
+      var source = target.getAttribute('render-source')
+
+      viewer.attachTo(target);
+      Docsify.get(location.origin + location.pathname + source).then(function (content) {
+        viewer.importXML(content);
+      });
+    });
+    _.forEach(document.querySelectorAll('[render-type="puml"]'), function(target){
+      target.removeAttribute('render-type')
+      var source = target.getAttribute('render-source')
+      Docsify.get(location.origin + location.pathname + source).then(function (content) {
+        target.innerHTML = '<img src="http://www.plantuml.com/plantuml/svg/' + plantUmlEncode(
+          content) + '" />';
+      });
+    });
+  }, 500);
+
+  <div class="mxgraph" style="max-width:100%;border:1px solid transparent;" data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;nav&quot;:true,&quot;resize&quot;:true,&quot;toolbar&quot;:&quot;zoom layers lightbox&quot;,&quot;url&quot;:&quot;https://raw.githubusercontent.com/kkojaeh/pico-erp-server/master/docs/resources/%EA%B2%AC%EC%A0%81%20%ED%9D%90%EB%A6%84.xml&quot;}"></div>
+    <script type="text/javascript" src="https://www.draw.io/embed2.js?&fetch=https%3A%2F%2Fraw.githubusercontent.com%2Fkkojaeh%2Fpico-erp-server%2Fmaster%2Fdocs%2Fresources%2F%25EA%25B2%25AC%25EC%25A0%2581%2520%25ED%259D%2590%25EB%25A6%2584.xml"></script>
+
+  function onHashChange() {
+    location.reload()
+  }
+
+
+</script>
+<script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+<script src="//unpkg.com/docsify/lib/plugins/zoom-image.min.js"></script>
+<script src="//unpkg.com/docsify/lib/plugins/search.min.js"></script>
+<script type="text/javascript"
+        src="https://www.planttext.com/js/jquery-plantuml/rawdeflate.min.js?v=13.4"></script>
+<script type="text/javascript"
+        src="https://www.planttext.com/js/jquery-plantuml/rawinflate.min.js?v=13.4"></script>
+<script type="text/javascript"
+        src="https://www.planttext.com/js/jquery-plantuml/plantuml.min.js?v=13.4"></script>
+<!-- <script type="text/javascript" src="js/planttext.min.js?v=13.4"></script>-->
+</body>
+</html>

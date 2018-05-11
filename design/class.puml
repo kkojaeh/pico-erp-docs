@@ -1,0 +1,154 @@
+@startuml
+
+class "사용자[User]"{
+  id - 아이디
+  displayName - 표시이름
+  email - 이메일
+  mobileNumber - 핸드폰 번호
+  password - 암호
+}
+
+class "업체[Company]"{
+  code - 아이디 코드[3자리영문]
+  name - 이름
+  registrationNumber - 사업자등록번호[or DUNS Number]
+
+}
+
+class "품목[Item]"{
+  id - 아이디
+  code - 코드
+  externalCode - 외부코드
+  name - 품목명
+  spec - 스펙
+  price - 단가
+  attachment - 첨부파일
+  barCode - 바코드
+  materialItems - 자재 아이템들
+  createdDate - 생성일
+  createdBy - 생성자
+  lastModifiedDate - 최종수정일
+  lastModifiedBy - 최종수정자
+  remainQuantity - 수량
+  histories - 변경내역
+  processes - 공정
+  lot - LOT 여부
+}
+
+class "발주[Order]"{
+  id - 아이디
+  status - 상태
+  deliveryDate - 납기일
+  releaseRequestDate - 출고요청일
+  workDueDate - 작업 만기일
+  orderAmount - 발주금액(?)
+  histories - 변경내역
+}
+
+class "발주품목[OrderItem]"{
+  id - 아이디
+  order - 발주
+  item - 품목
+  status - 상태
+  unit - 단위
+  quantity - 수량
+  extraQuantity - 여분수량[화면에 퍼센트 표시]
+  totalQuantity - 전체수량
+  resultQuantity - 결과수량
+  price - 단가[당시 품목의 단가]
+  remark - 비고
+}
+
+class "납품[Delivery]"{
+  id - 아이디
+  status - 상태
+  deliveryRequestDate - 납품요청일
+  deliveryLocation - 인도장소
+  createdDate - 생성일
+  createdBy - 생성자
+}
+
+class "납품품목[DeliveryItem]"{
+  delivery - 납품
+  item - 품목
+  quantity - 수량
+}
+
+class "변경내역[History]"{
+  comment - 내용
+  reason - 사유
+  createdDate - 생성일
+  createdBy - 생성자
+}
+
+
+class "작업지시[WorkOrder]"{
+  id - 아이디
+  orderItem - 발주품목[발주에 의해 생성]
+  item - 품목
+  remark - 비고
+  createdDate - 생성일
+  createdBy - 생성자
+}
+
+class "작업지시자재[WorkOrderMaterialItem]"{
+  item - 품목
+  quantity - 수량
+  availableDate - 사용가능 일자
+}
+
+interface "공정[ProcessType]"{
+  quantity - 수
+}
+
+interface "공정이행[ProcessExecution]"{
+
+}
+
+class "인쇄공정[PrintingProcess]"{
+
+}
+
+class "출력공정[OutputProcess]"{
+
+}
+
+class "코팅공정[CoatingProcess]"{
+
+}
+class "금/은박 및 형압공정[FoilOrPressProcess]"{
+}
+class "합지공정[LaminatingProcess]"{
+}
+class "톰슨공정[TomsonProcess]"{
+}
+class "접착공정[PrintingProcess]"{
+}
+class "기타공정[PrintingProcess]"{
+}
+
+"공정[ProcessType]" <|- "인쇄공정[PrintingProcess]"
+"공정[ProcessType]" <|- "출력공정[OutputProcess]"
+"공정[ProcessType]" <|- "코팅공정[CoatingProcess]"
+"공정[ProcessType]" <|- "금/은박 및 형압공정[FoilOrPressProcess]"
+"공정[ProcessType]" <|- "합지공정[LaminatingProcess]"
+"공정[ProcessType]" <|- "톰슨공정[TomsonProcess]"
+"공정[ProcessType]" <|- "접착공정[PrintingProcess]"
+"공정[ProcessType]" <|- "기타공정[PrintingProcess]"
+"품목[Item]" --> "변경내역[History]"
+"발주[Order]" --> "변경내역[History]"
+
+enum "코팅종류[CoatingProcessKind]"{
+  "CR 코팅[CR]"
+  "수성코팅[Water]"
+}
+
+enum "출력종류[OutputProcessKind]"{
+  "CTP[CTP]"
+}
+
+enum "금/은박 및 형압공정종류[FoilOrPressProcess]"{
+}
+
+
+@enduml

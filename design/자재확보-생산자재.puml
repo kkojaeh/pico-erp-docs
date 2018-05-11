@@ -1,0 +1,12 @@
+@startuml
+|생산|
+start
+:자재확보[+];
+:생산요청;
+
+stop
+legend bottom
+  이 단계는 하위 품목에 대하여 재귀적으로 처리되며
+  최상위 품목의 자재확보시 하위의 생산품목에 대하여 동일한 처리가 진행된다
+endlegend
+@enduml
