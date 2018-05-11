@@ -24,29 +24,35 @@
     max-width: initial;
   }
 </style>
-<script>
+<script type="text/javascript">
 
-  var gitPath = '/kkojaeh/pico-erp-docs'
+  var gitUser = 'kkojaeh'
+  var gitProject = 'pico-erp-docs'
+  var gitPath = '/'+ gitUser+'/' + gitProject
+  var drawIoTemplate = _.template('<div class="mxgraph" style="max-width:100%;border:1px solid transparent;" data-mxgraph="${options}"></div>');
 
   function drawIoRenderer(href){
-    var resource = 'https://raw.githubusercontent.com' + gitPath + '/master' + href
+    var resource = 'https://raw.githubusercontent.com/' + gitUser+'/' + gitProject + '/master' + href
     var options = {
-      "highlight": "#0000ff",
-      "nav": true,
-      "resize": true,
-      "toolbar": "zoom layers lightbox",
-      "url": resource
+      highlight: "#0000ff",
+      nav: true,
+      resize: true,
+      toolbar: "zoom layers lightbox",
+      url: resource,
+      edit: "https://www.draw.io/#H" + gitUser+'/' + gitProject + "/master" + href
     }
-
     var data = {
-      options: encodeURIComponent(JSON.stringify(options)),
+      options: _.escape(JSON.stringify(options)),
       fetch: encodeURIComponent(resource)
     }
-
-    var template = '<div class="mxgraph" style="max-width:100%;border:1px solid transparent;" data-mxgraph="${options}"></div>'
-    template += '<script type="text/javascript" src="https://www.draw.io/embed2.js?&fetch=${fetch}">'
-    template += '</' + 'script>'
-    return _.template(template ,data)
+    setTimeout(function(){
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = 'https://www.draw.io/embed2.js?&fetch='+ encodeURIComponent(resource);
+      document.head.appendChild(script);
+    }, 100)
+    console.log(drawIoTemplate(data))
+    return drawIoTemplate(data)
   }
 
   window.$docsify = {
@@ -71,7 +77,7 @@
 
     plugins: [
       EditOnGithubPlugin.create(
-        'https://github.com'+ gitPath +'/blob/master/'
+        'https://github.com/'+ gitUser+'/' + gitProject +'/blob/master/'
       )
     ],
 
