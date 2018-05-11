@@ -12,9 +12,7 @@ otator -->
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.css">
-  <script src="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
   <script src="//unpkg.com/docsify-edit-on-github/index.js"></script>
-  <script src="//unpkg.com/docsify-copy-code"></script>
   <script src="//unpkg.com/bpmn-js@1.3.2/dist/bpmn-viewer.production.min.js"></script>
   <script src="//unpkg.com/lodash@4.17.10/lodash.min.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/bpmn-js@1.3.2/dist/assets/diagram-js.css">
@@ -30,10 +28,34 @@ otator -->
   }
 </style>
 <script>
+
+  var gitPath = '/kkojaeh/pico-erp-docs'
+
+  function drawIoRenderer(href){
+    var resource = 'https://raw.githubusercontent.com' + gitPath + '/master' + href
+    var options = {
+      "highlight": "#0000ff",
+      "nav": true,
+      "resize": true,
+      "toolbar": "zoom layers lightbox",
+      "url": resource
+    }
+
+    var data = {
+      options: encodeURIComponent(JSON.stringify(options)),
+      fetch: encodeURIComponent(resource)
+    }
+
+    var template = '<div class="mxgraph" style="max-width:100%;border:1px solid transparent;" data-mxgraph="${options}"></div>'
+    template += '<script type="text/javascript" src="https://www.draw.io/embed2.js?&fetch=${fetch}">'
+    template += '</' + 'script>'
+    return _.template(template ,data)
+  }
+
   window.$docsify = {
     loadSidebar: true,
     name: 'Pico ERP',
-    repo: 'https://github.com/kkojaeh/pico-erp-server/tree/master/docs',
+    repo: 'https://github.com/kkojaeh/pico-erp-docs/tree/master',
     alias: {
       '/.*/_sidebar.md': '/_sidebar.md'
     },
@@ -52,7 +74,7 @@ otator -->
 
     plugins: [
       EditOnGithubPlugin.create(
-        'https://github.com/kkojaeh/pico-erp-server/blob/master/docs/'
+        'https://github.com'+ gitPath +'/blob/master/'
       )
     ],
 
@@ -64,6 +86,9 @@ otator -->
             return (
               '<div class="mermaid">' + mermaid.render(lang, code) + "</div>"
             );
+          }
+          if (lang === "draw.io") {
+
           }
           return this.origin.code.apply(this, arguments);
         },
@@ -77,6 +102,9 @@ otator -->
             afterRenderer();
             return '<p render-type="bpmn" render-styles="' + title + '" render-source="' + href
               + '"></p>';
+          }
+          if (href.lastIndexOf(':draw.io') > -1) {
+            return drawIoRenderer(href.substr(0, href.lastIndexOf(':draw.io')))
           }
           return this.origin.image.apply(this, arguments);
         }
@@ -118,8 +146,6 @@ otator -->
     });
   }, 500);
 
-  <div class="mxgraph" style="max-width:100%;border:1px solid transparent;" data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;nav&quot;:true,&quot;resize&quot;:true,&quot;toolbar&quot;:&quot;zoom layers lightbox&quot;,&quot;url&quot;:&quot;https://raw.githubusercontent.com/kkojaeh/pico-erp-server/master/docs/resources/%EA%B2%AC%EC%A0%81%20%ED%9D%90%EB%A6%84.xml&quot;}"></div>
-    <script type="text/javascript" src="https://www.draw.io/embed2.js?&fetch=https%3A%2F%2Fraw.githubusercontent.com%2Fkkojaeh%2Fpico-erp-server%2Fmaster%2Fdocs%2Fresources%2F%25EA%25B2%25AC%25EC%25A0%2581%2520%25ED%259D%2590%25EB%25A6%2584.xml"></script>
 
   function onHashChange() {
     location.reload()
