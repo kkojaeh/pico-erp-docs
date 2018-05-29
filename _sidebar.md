@@ -7,7 +7,7 @@
   - [환경 설정](/development/setup.md)
   - [기술](/development/skill.md)
 - [계획](/plan/)
-- 가이드
+- [가이드](/guide/)
   - [견적](/guide/quotation/)
 
 <!---
