@@ -7,3 +7,13 @@
 - 운송
 - 창고
 - 폐기
+
+## 개체
+
+- 팔레트
+- Zone + Rack + Bay + Level
+  - Zone: 지역
+  - Rack: 랙
+  - Bay: 파레트 하나의 면적으로 랙을 나눈 구역
+  - Level: 하나의 Bay 기준의 층수
+

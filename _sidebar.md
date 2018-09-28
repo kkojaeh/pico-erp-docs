@@ -3,6 +3,7 @@
 - [Home](/)
 - [설계](/design/)
   - [견적](/design/quotation/)
+  - [생산계획](/design/produce-planning/)
 - 개발자
   - [환경 설정](/development/setup.md)
   - [기술](/development/skill.md)
